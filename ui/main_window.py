@@ -95,12 +95,12 @@ class MainWindow(ctk.CTkFrame):
         output_directory_label.pack(pady=5, padx=5, side="left")
 
         # Entrada para seleccionar direcotorio de salida
-        output_directory_entry = ctk.CTkEntry(self.options_frame, placeholder_text="CTkEntry", state="disabled")
-        output_directory_entry.pack(pady=5, padx=5, side="left", fill="x")
+        self.output_directory_entry = ctk.CTkEntry(self.options_frame, placeholder_text="CTkEntry", width=400)
+        self.output_directory_entry.pack(pady=5, padx=5, side="left", fill="x")
 
         # Botón para seleccionar directorio de salida
-        output_directory_button = ctk.CTkButton(self.options_frame, text="Seleccionar", command=self.delete_doc)
-        output_directory_button.pack(pady=5, padx=5, side="left")
+        output_directory_button = ctk.CTkButton(self.options_frame, text="Seleccionar", command=self.select_directory)
+        output_directory_button.pack(pady=5, padx=5, side="right")
 
         # Botón para generar Texto
         gen_text_button = ctk.CTkButton(self.generate_frame, text="Generar Texto", command=self.generate_text, fg_color="yellow", hover_color="orange", text_color="black")
@@ -141,6 +141,14 @@ class MainWindow(ctk.CTkFrame):
 
     def preview(self):
         print("Vista Previa del documento")
+
+    def select_directory(self):
+        print("Seleccionando Directorio")
+        directorio = filedialog.askdirectory()
+        entry = self.output_directory_entry
+        if entry.get():
+            entry.delete(0,len(entry.get()))
+        self.output_directory_entry.insert(0,directorio)
     
     def generate_text(self):
         print("Generando...")
