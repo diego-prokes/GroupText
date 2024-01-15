@@ -71,10 +71,10 @@ class MainWindow(ctk.CTkFrame):
         self.load_button.pack(pady=5)
 
         # Botones para mover los elementos
-        up_button = ctk.CTkButton(self.controls_frame, text="Move Up", command=self.move_up)
+        up_button = ctk.CTkButton(self.controls_frame, text="Subir", command=self.move_up)
         up_button.pack(pady=5)
 
-        down_button = ctk.CTkButton(self.controls_frame, text="Move Down", command=self.move_down)
+        down_button = ctk.CTkButton(self.controls_frame, text="Bajar", command=self.move_down)
         down_button.pack(pady=5)
 
         # Botón para mostrar vista previa
@@ -95,7 +95,7 @@ class MainWindow(ctk.CTkFrame):
         output_directory_label.pack(pady=5, padx=5, side="left")
 
         # Entrada para seleccionar direcotorio de salida
-        self.output_directory_entry = ctk.CTkEntry(self.options_frame, placeholder_text="CTkEntry", width=400)
+        self.output_directory_entry = ctk.CTkEntry(self.options_frame, placeholder_text="ruta de salida", width=400)
         self.output_directory_entry.pack(pady=5, padx=5, side="left", fill="x")
 
         # Botón para seleccionar directorio de salida
