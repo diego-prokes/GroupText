@@ -67,7 +67,7 @@ class MainWindow(ctk.CTkFrame):
         controls_label.pack(pady=5, padx=5, side="left")
         
         # Menú para cargar documentos
-        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Documentos", command=self.load_document, fg_color="green", hover_color="dark green")
+        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Documentos", command=self.load_documents, fg_color="green", hover_color="dark green")
         self.load_button.pack(pady=5)
 
         # Botones para mover los elementos
@@ -89,7 +89,6 @@ class MainWindow(ctk.CTkFrame):
         controls_label = ctk.CTkLabel(self.preview_frame, text="Panel de Vista Previa: ", fg_color="transparent")
         controls_label.pack(pady=5, padx=5, fill="y")
 
-
         # Label para directorio de salida
         output_directory_label = ctk.CTkLabel(self.options_frame, text="Ruta de salida: ", fg_color="transparent")
         output_directory_label.pack(pady=5, padx=5, side="left")
@@ -108,13 +107,13 @@ class MainWindow(ctk.CTkFrame):
 
 
 
-    def load_document(self):
+    def load_documents(self):
         # Función para cargar documentos
-        file_paths = filedialog.askopenfilenames()
+        file_paths = filedialog.askopenfilenames(filetypes=[("All Files", "*.pdf;*.docx;*.doc;*.png;*.jpg;*.jpeg")])
         file_paths = list(file_paths)
         if len(file_paths)>=1:
             for file_path in file_paths:
-                self.listbox.insert("end", Path(file_path).name)
+                self.listbox.insert("end", file_path)
             pass
 
     def button_click(self, i):
