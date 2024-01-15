@@ -2,6 +2,7 @@ import customtkinter as ctk
 from CTkListbox import CTkListbox
 from tkinter import filedialog, messagebox
 from pathlib import Path  
+from PIL import Image
 
 
 class MainWindow(ctk.CTkFrame):
@@ -27,31 +28,44 @@ class MainWindow(ctk.CTkFrame):
         self.panel_frame = ctk.CTkFrame(master=self.content_frame)
         self.panel_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
-        self.controls_frame = ctk.CTkFrame(master=self.content_frame)
-        self.controls_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        self.utils_frame = ctk.CTkFrame(master=self.content_frame)
+        self.utils_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+        
+        self.utils_frame.grid_columnconfigure(0, weight=1)
+        self.utils_frame.grid_rowconfigure(0, weight=1)
+
+        self.controls_frame = ctk.CTkFrame(master=self.utils_frame)
+        self.controls_frame.pack(padx=5, pady=5, fill="x")
+
+        self.preview_frame = ctk.CTkFrame(master=self.utils_frame)
+        self.preview_frame.pack(padx=5, pady=5, fill="both")
 
         self.options_frame = ctk.CTkFrame(master=self.content_frame)
-        self.options_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew",columnspan=1)
+        self.options_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew", columnspan=2)
 
-        # self.right_frame = ctk.CTkFrame(master=self)
-        # self.right_frame.grid(row=0, column=1, padx=10, pady=20, sticky="nsew")
 
-        # self.docs_frame = ctk.CTkFrame(master=self.right_frame)
-        # self.docs_frame.pack(pady=10, side="left")
-
-        # Left Frame Content
+        # Question Template Frame Content
         for i in range(20):  # Puedes cambiar el número de botones aquí
             button = ctk.CTkButton(self.question_template_frame, text=f"Button {i+1}", command=lambda i=i: self.button_click(i))
             button.pack(pady=10, padx=20, fill='x')
 
-        # Right Frame Content
+        # Content Frame Content
             
-        # Menú para cargar documentos
-        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Documento", command=self.load_document)
-        self.load_button.pack(pady=5)
-
+        # Panel Frame Content
         self.listbox = CTkListbox(self.panel_frame, command=self.show_value)
         self.listbox.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # Utils Frame Content
+
+        # Controls Frame Content
+
+        # Label de controls frame
+        controls_label = ctk.CTkLabel(self.controls_frame, text="Controles: ", fg_color="transparent")
+        controls_label.pack(pady=5, padx=5, side="left")
+        
+        # Menú para cargar documentos
+        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Documento", command=self.load_document, fg_color="green", hover_color="dark green")
+        self.load_button.pack(pady=5)
 
         # Botones para mover los elementos
         up_button = ctk.CTkButton(self.controls_frame, text="Move Up", command=self.move_up)
@@ -60,13 +74,30 @@ class MainWindow(ctk.CTkFrame):
         down_button = ctk.CTkButton(self.controls_frame, text="Move Down", command=self.move_down)
         down_button.pack(pady=5)
 
+        # Botón para mostrar vista previa
+        preview_button = ctk.CTkButton(self.controls_frame, text="Vista Previa", command=self.preview)
+        preview_button.pack(pady=5)
+
         # Botón para eliminar elementos
-        delete_button = ctk.CTkButton(self.controls_frame, text="Eliminar", command=self.delete_doc, fg_color="red")
+        delete_button = ctk.CTkButton(self.controls_frame, text="Eliminar", command=self.delete_doc, fg_color="red", hover_color="dark red")
         delete_button.pack(pady=5)
+
+        # Preview Frame Content
+        controls_label = ctk.CTkLabel(self.preview_frame, text="Panel de Vista Previa: ", fg_color="transparent")
+        controls_label.pack(pady=5, padx=5, fill="y")
+
+
+        # Label para directorio de salida
+        output_directory_label = ctk.CTkLabel(self.options_frame, text="Ruta de salida: ", fg_color="transparent")
+        output_directory_label.pack(pady=5, padx=5, side="left")
+
+        # Entrada para seleccionar direcotorio de salida
+        output_directory_entry = ctk.CTkEntry(self.options_frame, placeholder_text="CTkEntry", state="disabled")
+        output_directory_entry.pack(pady=5, padx=5, side="left")
 
         # Botón para generar Texto
         gen_text_button = ctk.CTkButton(self.options_frame, text="Generar Texto", command=self.generate_text)
-        gen_text_button.pack(pady=5)
+        gen_text_button.pack(padx=30, pady=5, side="right")
 
 
 
@@ -100,6 +131,9 @@ class MainWindow(ctk.CTkFrame):
         selected_indices = self.listbox.curselection()
         if selected_indices or selected_indices==0:
             self.listbox.delete(selected_indices)
+
+    def preview(self):
+        print("Vista Previa del documento")
     
     def generate_text(self):
         print("Generando...")
