@@ -52,10 +52,10 @@ class EventHandler:
     def select_directory(self):
         print("Seleccionando Directorio")
         directorio = filedialog.askdirectory()
-        entry = self.output_directory_entry
+        entry = self.main_window.output_directory_entry
         if entry.get():
             entry.delete(0,len(entry.get()))
-        self.output_directory_entry.insert(0,directorio)
+        self.main_window.output_directory_entry.insert(0,directorio)
     
     def generate_text(self):
         print("Generando...")
