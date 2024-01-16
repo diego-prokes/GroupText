@@ -92,8 +92,8 @@ class MainWindow(ctk.CTkFrame):
         controls_label.pack(pady=5, padx=5, fill="y")
 
         # TextBox para mostrar el texto extraído
-        textbox = ctk.CTkTextbox(self.options_frame, height=100)
-        textbox.pack(pady=5, padx=5, fill='both')
+        self.textbox = ctk.CTkTextbox(self.options_frame, height=100)
+        self.textbox.pack(pady=5, padx=5, fill='both')
 
         # Botón para generar texto
         extract_text_button = ctk.CTkButton(self.generate_frame, text="Generar Texto", command=self.event_handler.generate_text, fg_color="green", hover_color="dark green", text_color="white")
