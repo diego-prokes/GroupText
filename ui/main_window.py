@@ -42,11 +42,11 @@ class MainWindow(ctk.CTkFrame):
         self.preview_frame = ctk.CTkFrame(master=self.utils_frame)
         self.preview_frame.pack(padx=5, pady=5, fill="both")
 
-        self.options_frame = ctk.CTkFrame(master=self.content_frame)
-        self.options_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+        self.options_frame = ctk.CTkFrame(master=self.content_frame, height=150)
+        self.options_frame.grid(row=1, column=0, padx=10, pady=10, sticky="sew")
 
-        self.generate_frame = ctk.CTkFrame(master=self.content_frame)
-        self.generate_frame.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
+        self.generate_frame = ctk.CTkFrame(master=self.content_frame, height=150)
+        self.generate_frame.grid(row=1, column=1, padx=10, pady=10, sticky="sew")
 
 
         # Question Template Frame Content
@@ -91,18 +91,18 @@ class MainWindow(ctk.CTkFrame):
         controls_label = ctk.CTkLabel(self.preview_frame, text="Panel de Vista Previa: ", fg_color="transparent")
         controls_label.pack(pady=5, padx=5, fill="y")
 
-        # Label para directorio de salida
-        output_directory_label = ctk.CTkLabel(self.options_frame, text="Ruta de salida: ", fg_color="transparent")
-        output_directory_label.pack(pady=5, padx=5, side="left")
+        # TextBox para mostrar el texto extraído
+        textbox = ctk.CTkTextbox(self.options_frame, height=100)
+        textbox.pack(pady=5, padx=5, fill='both')
 
-        # Entrada para seleccionar direcotorio de salida
-        self.output_directory_entry = ctk.CTkEntry(self.options_frame, placeholder_text="ruta de salida", width=400)
-        self.output_directory_entry.pack(pady=5, padx=5, side="left", fill="x")
+        # Botón para generar texto
+        extract_text_button = ctk.CTkButton(self.generate_frame, text="Generar Texto", command=self.event_handler.generate_text, fg_color="green", hover_color="dark green", text_color="white")
+        extract_text_button.pack(padx=30, pady=5)
 
-        # Botón para seleccionar directorio de salida
-        output_directory_button = ctk.CTkButton(self.options_frame, text="Seleccionar", command=self.event_handler.select_directory)
-        output_directory_button.pack(pady=5, padx=5, side="right")
+        # Botón para eliminar texto
+        delete_text_button = ctk.CTkButton(self.generate_frame, text="Eliminar Texto", command=self.event_handler.delete_text, fg_color="red", hover_color="dark red", text_color="white")
+        delete_text_button.pack(padx=30, pady=5)
 
-        # Botón para generar Texto
-        gen_text_button = ctk.CTkButton(self.generate_frame, text="Generar Texto", command=self.event_handler.generate_text, fg_color="yellow", hover_color="orange", text_color="black")
+        # Botón para guardar texto
+        gen_text_button = ctk.CTkButton(self.generate_frame, text="Guardar Texto", command=self.event_handler.ask_save_file_and_write_text, fg_color="yellow", hover_color="orange", text_color="black")
         gen_text_button.pack(padx=30, pady=5)
