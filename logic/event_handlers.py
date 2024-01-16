@@ -106,8 +106,15 @@ class EventHandler:
             print(f"Texto guardado con éxito en {file_path}")
         except Exception as e:
             print(f"Error al guardar el texto: {e}")
+        return file_path
     
-    def ask_save_file_and_write_text(self, extracted_text):
+    def ask_save_file_and_write_text(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")])
         if file_path:
-            self.save_text_to_file(extracted_text, file_path)
+            output_filepath = self.save_text_to_file(self.text, file_path)
+            self.main_window.textbox.delete("0.0", 'end')
+            self.main_window.textbox.insert("0.0", f'Texto guardado en:\n{file_path}')
+
+        
+        
+        
