@@ -3,18 +3,18 @@ from CTkListbox import CTkListbox
 from tkinter import filedialog, messagebox
 from pathlib import Path  
 from PIL import Image
+from logic.event_handlers import EventHandler
 
 
 class MainWindow(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.event_handler = EventHandler(self)
 
         # MainWindows
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=5)
         self.grid_rowconfigure(0, weight=1)
-
-        self.doc_list = []
 
         # Frames
         self.question_template_frame = ctk.CTkScrollableFrame(master=self)
@@ -57,7 +57,7 @@ class MainWindow(ctk.CTkFrame):
         # Content Frame Content
             
         # Panel Frame Content
-        self.listbox = CTkListbox(self.panel_frame, command=self.show_value)
+        self.listbox = CTkListbox(self.panel_frame, command=self.event_handler.show_value)
         self.listbox.pack(fill="both", expand=True, padx=10, pady=10)
 
         # Utils Frame Content
@@ -69,22 +69,22 @@ class MainWindow(ctk.CTkFrame):
         controls_label.pack(pady=5, padx=5, side="left")
         
         # Menú para cargar documentos
-        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Documentos", command=self.load_documents, fg_color="green", hover_color="dark green")
+        self.load_button = ctk.CTkButton(self.controls_frame, text="Cargar Documentos", command=self.event_handler.load_documents, fg_color="green", hover_color="dark green")
         self.load_button.pack(pady=5)
 
         # Botones para mover los elementos
-        up_button = ctk.CTkButton(self.controls_frame, text="Subir", command=self.move_up)
+        up_button = ctk.CTkButton(self.controls_frame, text="Subir", command=self.event_handler.move_up)
         up_button.pack(pady=5)
 
-        down_button = ctk.CTkButton(self.controls_frame, text="Bajar", command=self.move_down)
+        down_button = ctk.CTkButton(self.controls_frame, text="Bajar", command=self.event_handler.move_down)
         down_button.pack(pady=5)
 
         # Botón para mostrar vista previa
-        preview_button = ctk.CTkButton(self.controls_frame, text="Vista Previa", command=self.preview)
+        preview_button = ctk.CTkButton(self.controls_frame, text="Vista Previa", command=self.event_handler.preview)
         preview_button.pack(pady=5)
 
         # Botón para eliminar elementos
-        delete_button = ctk.CTkButton(self.controls_frame, text="Eliminar", command=self.delete_doc, fg_color="red", hover_color="dark red")
+        delete_button = ctk.CTkButton(self.controls_frame, text="Eliminar", command=self.event_handler.delete_doc, fg_color="red", hover_color="dark red")
         delete_button.pack(pady=5)
 
         # Preview Frame Content
@@ -100,64 +100,9 @@ class MainWindow(ctk.CTkFrame):
         self.output_directory_entry.pack(pady=5, padx=5, side="left", fill="x")
 
         # Botón para seleccionar directorio de salida
-        output_directory_button = ctk.CTkButton(self.options_frame, text="Seleccionar", command=self.select_directory)
+        output_directory_button = ctk.CTkButton(self.options_frame, text="Seleccionar", command=self.event_handler.select_directory)
         output_directory_button.pack(pady=5, padx=5, side="right")
 
         # Botón para generar Texto
-        gen_text_button = ctk.CTkButton(self.generate_frame, text="Generar Texto", command=self.generate_text, fg_color="yellow", hover_color="orange", text_color="black")
+        gen_text_button = ctk.CTkButton(self.generate_frame, text="Generar Texto", command=self.event_handler.generate_text, fg_color="yellow", hover_color="orange", text_color="black")
         gen_text_button.pack(padx=30, pady=5)
-
-
-
-    def load_documents(self):
-        # Función para cargar documentos
-        file_paths = filedialog.askopenfilenames(filetypes=[("All Files", "*.pdf;*.docx;*.doc;*.png;*.jpg;*.jpeg")])
-        file_paths = list(file_paths)
-        if len(file_paths)>=1:
-            for file_path in file_paths:
-                element = (file_path, Path(file_path).name)
-                if element not in self.doc_list:
-                    self.doc_list.append(element)
-                    self.listbox.insert("end", self.doc_list[-1][1])
-            pass
-
-    def button_click(self, i):
-        print(f"Button {i+1} pressed")
-
-    def show_value(self, selected_option):
-        print(selected_option)
-
-
-    def move_up(self):
-        index = self.listbox.curselection()
-        if index:
-            if 1 <= index <= len(self.doc_list) - 1:
-                self.doc_list[index], self.doc_list[index - 1] = self.doc_list[index - 1], self.doc_list[index]
-                self.listbox.move_up(index)
-
-    def move_down(self):
-        index = self.listbox.curselection()
-        if index or index==0:
-            if 0 <= index < len(self.doc_list) - 1:
-                self.doc_list[index], self.doc_list[index + 1] = self.doc_list[index + 1], self.doc_list[index]
-                self.listbox.move_down(index)
-
-    def delete_doc(self):
-        index = self.listbox.curselection()
-        if index or index==0:
-            elemento_eliminado = self.doc_list.pop(index)
-            self.listbox.delete(index)
-
-    def preview(self):
-        print("Vista Previa del documento")
-
-    def select_directory(self):
-        print("Seleccionando Directorio")
-        directorio = filedialog.askdirectory()
-        entry = self.output_directory_entry
-        if entry.get():
-            entry.delete(0,len(entry.get()))
-        self.output_directory_entry.insert(0,directorio)
-    
-    def generate_text(self):
-        print("Generando...")
