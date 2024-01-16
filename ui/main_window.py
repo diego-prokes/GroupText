@@ -14,6 +14,8 @@ class MainWindow(ctk.CTkFrame):
         self.grid_columnconfigure(1, weight=5)
         self.grid_rowconfigure(0, weight=1)
 
+        self.doc_list = []
+
         # Frames
         self.question_template_frame = ctk.CTkScrollableFrame(master=self)
         self.question_template_frame.grid(row=0, column=0, padx=10, pady=20, sticky="nsew")
@@ -113,7 +115,8 @@ class MainWindow(ctk.CTkFrame):
         file_paths = list(file_paths)
         if len(file_paths)>=1:
             for file_path in file_paths:
-                self.listbox.insert("end", file_path)
+                self.doc_list.append((file_path, Path(file_path).name))
+                self.listbox.insert("end", self.doc_list[-1][1])
             pass
 
     def button_click(self, i):
@@ -124,19 +127,24 @@ class MainWindow(ctk.CTkFrame):
 
 
     def move_up(self):
-        selected_indices = self.listbox.curselection()
-        if selected_indices:
-            self.listbox.move_up(selected_indices)
+        index = self.listbox.curselection()
+        if index:
+            if 1 <= index <= len(self.doc_list) - 1:
+                self.doc_list[index], self.doc_list[index - 1] = self.doc_list[index - 1], self.doc_list[index]
+                self.listbox.move_up(index)
 
     def move_down(self):
-        selected_indices = self.listbox.curselection()
-        if selected_indices or selected_indices==0:
-            self.listbox.move_down(selected_indices)
+        index = self.listbox.curselection()
+        if index or index==0:
+            if 0 <= index < len(self.doc_list) - 1:
+                self.doc_list[index], self.doc_list[index + 1] = self.doc_list[index + 1], self.doc_list[index]
+                self.listbox.move_down(index)
 
     def delete_doc(self):
-        selected_indices = self.listbox.curselection()
-        if selected_indices or selected_indices==0:
-            self.listbox.delete(selected_indices)
+        index = self.listbox.curselection()
+        if index or index==0:
+            elemento_eliminado = self.doc_list.pop(index)
+            self.listbox.delete(index)
 
     def preview(self):
         print("Vista Previa del documento")
