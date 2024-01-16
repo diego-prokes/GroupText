@@ -115,8 +115,10 @@ class MainWindow(ctk.CTkFrame):
         file_paths = list(file_paths)
         if len(file_paths)>=1:
             for file_path in file_paths:
-                self.doc_list.append((file_path, Path(file_path).name))
-                self.listbox.insert("end", self.doc_list[-1][1])
+                element = (file_path, Path(file_path).name)
+                if element not in self.doc_list:
+                    self.doc_list.append(element)
+                    self.listbox.insert("end", self.doc_list[-1][1])
             pass
 
     def button_click(self, i):
