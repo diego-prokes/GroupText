@@ -1,8 +1,5 @@
 import customtkinter as ctk
 from CTkListbox import CTkListbox
-from tkinter import filedialog, messagebox
-from pathlib import Path  
-from PIL import Image
 from logic.event_handlers import EventHandler
 
 
