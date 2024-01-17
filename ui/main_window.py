@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from CTkListbox import CTkListbox
 from logic.event_handlers import EventHandler
+import json
 
 
 class MainWindow(ctk.CTkFrame):
@@ -46,10 +47,29 @@ class MainWindow(ctk.CTkFrame):
         self.generate_frame.grid(row=1, column=1, padx=10, pady=10, sticky="sew")
 
 
+        # Leer el archivo JSON
+        with open('preguntas_licitacion.json', 'r', encoding='utf-8') as archivo:
+            datos_json = json.load(archivo)
+
+        # Obtener las preguntas bajo la clave "preguntas_licitacion"
+        preguntas_licitacion = datos_json["preguntas_licitacion"]
+
+
         # Question Template Frame Content
-        for i in range(10):  # Puedes cambiar el número de botones aquí
-            button = ctk.CTkButton(self.question_template_frame, text=f"Plantilla {i+1}\nDescripción", command=lambda i=i: self.button_click(i))
-            button.pack(pady=10, padx=20, fill='x')
+        # Question Template Frame Content
+        for i, pregunta in enumerate(preguntas_licitacion):
+            text_btn = ctk.CTkTextbox(self.question_template_frame, height=80)
+            text_btn.insert('0.0', pregunta, tags=None)
+            text_btn.pack(pady=10, padx=20, fill='x')
+            text_btn.configure(state='disabled')
+            print(pregunta)
+            # scrollable_frame = ctk.CTkScrollableFrame(self.question_template_frame, width=200, height=200, )
+            # copy_button = ctk.CTkButton(self.question_template_frame, text=pregunta, command=lambda i=i: self.button_click(i))
+            # copy_button.pack(pady=10, padx=20, fill='x')
+
+#             copy_button = tk.Button(root, text="Copy to Clipboard", command=copy_to_clipboard)
+# copy_button.pack(pady=20)
+#             button.pack(pady=10, padx=20, fill='x')
 
         # Content Frame Content
             
