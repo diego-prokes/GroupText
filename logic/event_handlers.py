@@ -1,6 +1,9 @@
 from tkinter import filedialog
 from pathlib import Path
 import docx
+from PIL import Image
+import pytesseract
+import fitz  # PyMuPDF
 
 class EventHandler:
     def __init__(self, main_window):
@@ -67,6 +70,8 @@ class EventHandler:
                 self.text += self.extract_text_from_docx(file_path)
             elif file_path.endswith('.doc'):
                 self.text += self.extract_text_from_doc(file_path)
+            elif file_path.endswith('.pdf'):
+                self.text += self.extract_text_from_pdf(file_path)
             else:
                 raise ValueError("Unsupported file format")
         self.main_window.textbox.insert("0.0", "Texto Generado")
@@ -99,6 +104,22 @@ class EventHandler:
             print(f"Error al procesar el archivo DOC: {e}")
             return ""
         
+    def extract_text_from_pdf(self, file_path):
+        texto = ''
+        documento_pdf = fitz.open(file_path)
+        for pagina in range(len(documento_pdf)):
+            texto_pagina = self.convertir_pagina_a_texto(documento_pdf, pagina)
+            texto += texto_pagina + "\n"
+        return texto
+
+    def convertir_pagina_a_texto(self, pdf_documento, pagina):
+        pagina_pdf = pdf_documento.load_page(pagina)
+        imagen = pagina_pdf.get_pixmap()
+        imagen_pil = Image.frombytes("RGB", [imagen.width, imagen.height], imagen.samples)
+        pytesseract.pytesseract.tesseract_cmd = r'C:\Users\DProkes\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
+        texto = pytesseract.image_to_string(imagen_pil, lang='spa')  # Usamos pytesseract para OCR
+        return texto
+
     def save_text_to_file(self, text, file_path):
         try:
             with open(file_path, 'w', encoding='utf-8') as file:
