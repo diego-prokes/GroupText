@@ -64,9 +64,9 @@ class EventHandler:
         for document in self.doc_list:
             file_path   = document[0]
             if file_path.endswith('.docx'):
-                self.text = self.extract_text_from_docx(file_path)
+                self.text += self.extract_text_from_docx(file_path)
             elif file_path.endswith('.doc'):
-                self.text = self.extract_text_from_doc(file_path)
+                self.text += self.extract_text_from_doc(file_path)
             else:
                 raise ValueError("Unsupported file format")
         self.main_window.textbox.insert("0.0", "Texto Generado")
