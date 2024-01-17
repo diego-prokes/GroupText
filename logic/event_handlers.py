@@ -66,6 +66,7 @@ class EventHandler:
         self.main_window.textbox.delete("0.0", "end")
         for document in self.doc_list:
             file_path   = document[0]
+            self.text += f"=== Título: {Path(file_path).name} ===\n\n"
             if file_path.endswith('.docx'):
                 self.text += self.extract_text_from_docx(file_path)
             elif file_path.endswith('.doc'):
