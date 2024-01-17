@@ -4,6 +4,15 @@ import docx
 from PIL import Image
 import pytesseract
 import fitz  # PyMuPDF
+import threading
+import sys
+import os
+
+if getattr(sys, 'frozen', False):
+    _path = os.path.join(sys._MEIPASS, 'tesseract/tesseract.exe')
+    pytesseract.pytesseract.tesseract_cmd = _path
+else:
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Users\DProkes\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
 
 class EventHandler:
     def __init__(self, main_window):
@@ -123,7 +132,6 @@ class EventHandler:
         pagina_pdf = pdf_documento.load_page(pagina)
         imagen = pagina_pdf.get_pixmap()
         imagen_pil = Image.frombytes("RGB", [imagen.width, imagen.height], imagen.samples)
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Users\DProkes\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
         texto = pytesseract.image_to_string(imagen_pil, lang='spa')  # Usamos pytesseract para OCR
         return texto
 
