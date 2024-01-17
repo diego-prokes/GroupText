@@ -67,6 +67,7 @@ class EventHandler:
         self.main_window.output_directory_entry.insert(0,directorio)
 
     def generate_text(self):
+        self.main_window.textbox.configure(state='normal')
         self.main_window.textbox.delete("0.0", "end")
         for document in self.doc_list:
             file_path   = document[0]
@@ -80,13 +81,14 @@ class EventHandler:
             else:
                 raise ValueError("Unsupported file format")
         self.main_window.textbox.insert("0.0", "Texto Generado")
+        self.main_window.textbox.configure(state='disabled')
     
     def delete_text(self):
+        self.main_window.textbox.configure(state='normal')
         self.text=''
         self.main_window.textbox.delete("0.0", "end")
         self.main_window.textbox.insert("0.0", "Texto Eliminado")
-
-
+        self.main_window.textbox.configure(state='disabled')
 
     def extract_text_from_docx(self, file_path):
         doc = docx.Document(file_path)
