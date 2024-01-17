@@ -51,8 +51,9 @@ class EventHandler:
             elemento_eliminado = self.doc_list.pop(index)
             self.main_window.listbox.delete(index)
 
-    def preview(self):
-        print("Vista Previa del documento")
+    def open_file_location(self):
+        return 0
+
 
     def select_directory(self):
         print("Seleccionando Directorio")
@@ -135,8 +136,4 @@ class EventHandler:
         if file_path:
             output_filepath = self.save_text_to_file(self.text, file_path)
             self.main_window.textbox.delete("0.0", 'end')
-            self.main_window.textbox.insert("0.0", f'Texto guardado en:\n{file_path}')
-
-        
-        
-        
+            self.main_window.textbox.insert("0.0", f'Texto guardado en:\n{file_path}')      

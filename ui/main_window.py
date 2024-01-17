@@ -77,7 +77,7 @@ class MainWindow(ctk.CTkFrame):
         down_button.pack(pady=5)
 
         # Botón para mostrar vista previa
-        preview_button = ctk.CTkButton(self.controls_frame, text="Vista Previa", command=self.event_handler.preview)
+        preview_button = ctk.CTkButton(self.controls_frame, text="Ir a la ubicación", command=self.event_handler.open_file_location, state="disabled")
         preview_button.pack(pady=5)
 
         # Botón para eliminar elementos
