@@ -30,6 +30,9 @@ class EventHandler:
     def show_value(self, selected_option):
         print(selected_option)
 
+    def copy_to_clipboard(self, event):
+        print(event)
+        # copy text to clipboard
 
     def move_up(self):
         index = self.main_window.listbox.curselection()

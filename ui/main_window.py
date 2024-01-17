@@ -37,13 +37,13 @@ class MainWindow(ctk.CTkFrame):
         self.controls_frame = ctk.CTkFrame(master=self.utils_frame)
         self.controls_frame.pack(padx=5, pady=5, fill="x")
 
-        self.preview_frame = ctk.CTkFrame(master=self.utils_frame)
-        self.preview_frame.pack(padx=5, pady=5, fill="both")
+        self.instructions_frame = ctk.CTkFrame(master=self.utils_frame)
+        self.instructions_frame.pack(padx=5, pady=5, fill="both")
 
         self.options_frame = ctk.CTkFrame(master=self.content_frame, height=150)
         self.options_frame.grid(row=1, column=0, padx=10, pady=10, sticky="sew")
 
-        self.generate_frame = ctk.CTkFrame(master=self.content_frame, height=150)
+        self.generate_frame = ctk.CTkFrame(master=self.content_frame, height=120)
         self.generate_frame.grid(row=1, column=1, padx=10, pady=10, sticky="sew")
 
 
@@ -54,25 +54,31 @@ class MainWindow(ctk.CTkFrame):
         # Obtener las preguntas bajo la clave "preguntas_licitacion"
         preguntas_licitacion = datos_json["preguntas_licitacion"]
 
+        # Question Template Frame Content
 
-        # Question Template Frame Content
-        # Question Template Frame Content
+        # Label de controls frame
+        questions_label = ctk.CTkLabel(self.question_template_frame, text="Preguntas frecuentes a ChatGPT ", fg_color="transparent")
+        questions_label.pack(pady=5, padx=5)
+
+        # Preguntas frecuentes
         for i, pregunta in enumerate(preguntas_licitacion):
             text_btn = ctk.CTkTextbox(self.question_template_frame, height=80)
             text_btn.insert('0.0', pregunta, tags=None)
             text_btn.pack(pady=10, padx=20, fill='x')
             text_btn.configure(state='disabled')
+            text_btn.bind("<Button-1>", self.event_handler.copy_to_clipboard)
             print(pregunta)
-            # scrollable_frame = ctk.CTkScrollableFrame(self.question_template_frame, width=200, height=200, )
-            # copy_button = ctk.CTkButton(self.question_template_frame, text=pregunta, command=lambda i=i: self.button_click(i))
-            # copy_button.pack(pady=10, padx=20, fill='x')
-
-#             copy_button = tk.Button(root, text="Copy to Clipboard", command=copy_to_clipboard)
-# copy_button.pack(pady=20)
-#             button.pack(pady=10, padx=20, fill='x')
 
         # Content Frame Content
+        
+        # Questions Template Frame content
             
+        # TextBox para mostrar el texto extraído
+        self.textbox = ctk.CTkTextbox(self.instructions_frame)
+        self.textbox.pack(pady=5, padx=5, fill='both')
+        self.textbox.insert('0.0', '1) Selecciones los archivos con el panel de la derecha.\n2) Ordene los archivos.\n3)Genere el texto y espere hasta que diga: Texto Generado.\n4) Guarde el archivo y súbalo a chatgpt para hacer sus consultas\n5)Haga las consultas, puede usar las preguntas frecuentes de la izquierda.')
+        self.textbox.configure(state='disabled')
+
         # Panel Frame Content
         self.listbox = CTkListbox(self.panel_frame, command=self.event_handler.show_value)
         self.listbox.pack(fill="both", expand=True, padx=10, pady=10)
@@ -104,13 +110,11 @@ class MainWindow(ctk.CTkFrame):
         delete_button = ctk.CTkButton(self.controls_frame, text="Eliminar", command=self.event_handler.delete_doc, fg_color="red", hover_color="dark red")
         delete_button.pack(pady=5)
 
-        # Preview Frame Content
-        controls_label = ctk.CTkLabel(self.preview_frame, text="Panel de Vista Previa: ", fg_color="transparent")
-        controls_label.pack(pady=5, padx=5, fill="y")
-
         # TextBox para mostrar el texto extraído
         self.textbox = ctk.CTkTextbox(self.options_frame, height=100)
         self.textbox.pack(pady=5, padx=5, fill='both')
+        self.textbox.insert('0.0', 'Esperando a que se genere texto...')
+        self.textbox.configure(state='disabled')
 
         # Botón para generar texto
         extract_text_button = ctk.CTkButton(self.generate_frame, text="Generar Texto", command=self.event_handler.generate_text, fg_color="green", hover_color="dark green", text_color="white")
