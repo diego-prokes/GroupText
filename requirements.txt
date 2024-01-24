@@ -6,4 +6,3 @@ Pillow==10.2.0
 pytesseract==0.3.10
 python_docx==1.1.0
 pywin32==306
-as
