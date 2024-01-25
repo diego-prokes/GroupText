@@ -9,7 +9,7 @@ import sys
 import os
 
 if getattr(sys, 'frozen', False):
-    _path = os.path.join(sys._MEIPASS, 'tesseract/tesseract.exe')
+    _path = os.path.join(sys._MEIPASS, './tesseract/tesseract.exe')
     pytesseract.pytesseract.tesseract_cmd = _path
 else:
     pytesseract.pytesseract.tesseract_cmd = r'C:\Users\DProkes\AppData\Local\Programs\Tesseract-OCR\tesseract.exe'
