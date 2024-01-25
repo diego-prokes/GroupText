@@ -76,21 +76,41 @@ class EventHandler:
         self.main_window.output_directory_entry.insert(0,directorio)
 
     def generate_text(self):
+        # Preparar la interfaz de usuario para la operación
         self.main_window.textbox.configure(state='normal')
         self.main_window.textbox.delete("0.0", "end")
+
+        # Crear y empezar hilos para procesar cada documento
+        threads = []
         for document in self.doc_list:
-            file_path   = document[0]
-            self.text += f"=== Título: {Path(file_path).name} ===\n\n"
-            if file_path.endswith('.docx'):
-                self.text += self.extract_text_from_docx(file_path)
-            elif file_path.endswith('.doc'):
-                self.text += self.extract_text_from_doc(file_path)
-            elif file_path.endswith('.pdf'):
-                self.text += self.extract_text_from_pdf(file_path)
-            else:
-                raise ValueError("Unsupported file format")
+            thread = threading.Thread(target=self.process_document, args=(document,))
+            threads.append(thread)
+            thread.start()
+
+        # Esperar a que todos los hilos terminen
+        for thread in threads:
+            thread.join()
+
+        # Actualizar la interfaz de usuario después de completar la operación
         self.main_window.textbox.insert("0.0", "Texto Generado")
         self.main_window.textbox.configure(state='disabled')
+
+    def process_document(self, document):
+        file_path = document[0]
+        text = f"=== Título: {Path(file_path).name} ===\n\n"
+        if file_path.endswith('.docx'):
+            text += self.extract_text_from_docx(file_path)
+        elif file_path.endswith('.doc'):
+            text += self.extract_text_from_doc(file_path)
+        elif file_path.endswith('.pdf'):
+            text += self.extract_text_from_pdf(file_path)
+        else:
+            raise ValueError("Unsupported file format")
+
+        # Asegúrate de que el acceso a la variable compartida 'self.text' sea seguro para hilos
+        with threading.Lock():
+            self.text += text
+
     
     def delete_text(self):
         self.main_window.textbox.configure(state='normal')
