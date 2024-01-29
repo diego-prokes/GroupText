@@ -3,6 +3,7 @@ from CTkListbox import CTkListbox
 from logic.event_handlers import EventHandler
 import json
 
+ctk.set_appearance_mode("dark")
 
 class MainWindow(ctk.CTkFrame):
     def __init__(self, parent):
