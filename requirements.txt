@@ -1,7 +1,6 @@
 CTkListbox==1.2
-CTkListbox==1.2
 customtkinter==5.2.2
-fitz==0.0.1.dev2
+PyMuPDF==1.23.15
 Pillow==10.2.0
 pytesseract==0.3.10
 python_docx==1.1.0
